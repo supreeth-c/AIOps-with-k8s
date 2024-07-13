@@ -52,3 +52,33 @@
   - `kubectl cluster-info` is used to view information about the cluster 
   - `kubectl get nodes` is used to get all the nodes part of the cluster
 
+## Docker Vs ContainerD
+- Docker & rocket  where the intial onces, but others wanted to get into k8s. 
+- K8s introduced CRI `Container Runtime interface` allowed any work with it provided they supported `Open Container Initiative OCI` `https://github.com/opencontainers`
+- OCI has `imagespec` and `runtimespec`
+  - imagespec: : specifications on how an image should be built, It defines the specification
+  - runtimespec: defines the stadards on how any container runtime should be developed 
+- Rocker and other contaier runtime that adhered to OCI standards were now supported as a container runtimes for K8s via CRI
+- Docker wasn't built to support CRI standards, because CRI came later 
+- K8s introduced what is know as dockershim, which is a hackay but temporary way to continue support Docker outside of the CRI
+- containerd can be used as a runtime of its own. 
+- ![Docker vs ContainerD](dockervsContainerd.png)
+- Because Docker followed the imagespec from OCI standards, so all the images built by Docker follows the standards. So they continue to work with containerd but Docker itself was removed as a supported runtime from K8s.
+- ContainerD event though is part of Docker, is a sperate project on its own now, and is memeber of CNCF with graduated status. 
+- One can install containerd without installing Docker itself.
+- ![containerd](containerd.png)
+- `nerdctl` provides a Docker like CLI for containerD it also supports Docker compose 
+- `nerdctl` supports 
+  - Encrypyted container image 
+  - Lazy Pulling 
+  - Namespaces in K8s
+  - ![Nerdctl commands](nerdctl.png)
+- `CRICTL` or `crictl`
+  - To connect CRI compatabile container runtimes, the continerd and Rocker use `crictl` is a commandline utlity that is used to interact with CRI compatible container runtime.
+  - ![crictl](crictl.png)
+    - This managed by K8s and used to debug and installed seperately
+    - kubectl doesn't know the containers so it will delete it. crictl utlity is only used for debugging purpose like getting inside a container
+    - ![crictl commands](crictlcommand.png)
+- Docker vs crictl 
+  - ![alt text](compare.png)
+  - ![alt text](containerdvsK8s.png)
